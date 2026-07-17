@@ -6,9 +6,6 @@
     <title>Aegis | System</title>
     <link rel="icon" type="image/png" href="icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { theme: { extend: { colors: { primary: '#2563eb' } } } }
-    </script>
 </head>
 <body class="bg-white text-slate-900 font-sans">
 
@@ -16,12 +13,14 @@
         <h1 class="text-6xl font-extrabold tracking-tighter mb-6">AEGIS</h1>
         <p class="text-xl text-slate-600 mb-10">Система плагинов для расширения функционала Telegram. Удобно, стабильно, модульно.</p>
         
-        <div class="relative inline-block text-left" id="download-group">
+        <div class="relative inline-block text-left" id="download-wrapper">
             <button onclick="toggleMenu()" class="bg-slate-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-slate-800 transition shadow-lg">
                 Скачать последнюю версию
             </button>
-            <div id="dropdown" class="hidden absolute left-0 mt-2 w-full bg-white border border-slate-200 rounded-lg shadow-xl py-2 z-10">
-
+            <div id="dropdown" class="hidden absolute left-0 mt-2 w-64 bg-white border border-slate-200 rounded-lg shadow-xl py-2 z-10">
+                <div id="file-list" class="text-sm">
+                    <p class="px-4 py-2 text-slate-400">Загрузка...</p>
+                </div>
             </div>
         </div>
     </header>
@@ -41,33 +40,55 @@
             </div>
         </section>
 
+        <section id="faq">
+            <h2 class="text-2xl font-bold mb-6">FAQ</h2>
+            <div class="bg-slate-50 p-8 rounded-xl border border-slate-100">
+                <p class="text-slate-500 italic">Здесь пока пусто.</p>
+            </div>
+        </section>
+
         <section>
             <h2 class="text-2xl font-bold mb-6">Поддержка</h2>
             <p class="text-slate-600 mb-4">Если возникли вопросы, мы на связи.</p>
-            <a href="https://t.me/aegis_client_support_bot" class="text-primary font-bold hover:underline">Перейти в Telegram-бота →</a>
+            <a href="https://t.me/aegis_client_support_bot" class="text-blue-600 font-bold hover:underline">Перейти в Telegram-бота →</a>
         </section>
     </main>
 
     <script>
         const REPO = 'KirillHojji/aegispage'; 
         const FOLDER = 'downloads';
+        let isError = false;
 
         async function init() {
+            const list = document.getElementById('file-list');
             try {
                 const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FOLDER}`);
                 const files = await res.json();
-                const menu = document.getElementById('dropdown');
                 
+                if (!files || files.length === 0) throw new Error("Пусто");
+                
+                list.innerHTML = "";
                 files.forEach(f => {
-                    menu.innerHTML += `<a href="${f.download_url}" class="block px-4 py-2 hover:bg-slate-50 text-sm">${f.name}</a>`;
+                    list.innerHTML += `<a href="${f.download_url}" class="block px-4 py-2 hover:bg-slate-50">${f.name}</a>`;
                 });
             } catch(e) {
-                document.getElementById('download-group').innerHTML = "Ошибка загрузки файлов";
+                isError = true;
+                list.innerHTML = `<p class="px-4 py-2 text-red-500">Ошибка: файлов нет</p>`;
             }
         }
 
         function toggleMenu() {
+            if (isError) {
+                alert("Ошибка: Файлы для скачивания сейчас недоступны. Проверьте репозиторий.");
+                return;
+            }
             document.getElementById('dropdown').classList.toggle('hidden');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('button')) {
+                document.getElementById('dropdown').classList.add('hidden');
+            }
         }
         init();
     </script>
