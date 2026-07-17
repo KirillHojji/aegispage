@@ -1,98 +1,75 @@
 <!DOCTYPE html>
-<html lang="ru" class="bg-slate-950 text-slate-200">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aegis | Core Modding Platform</title>
+    <title>Aegis | System</title>
+    <link rel="icon" type="image/png" href="icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#2563eb' } } } }
+    </script>
 </head>
-<body class="font-mono">
+<body class="bg-white text-slate-900 font-sans">
 
-    <header class="border-b border-slate-800">
-        <div class="max-w-5xl mx-auto px-6 py-20">
-            <h1 class="text-6xl font-bold tracking-tighter text-white mb-4">AEGIS</h1>
-            <p class="text-xl text-slate-400">Платформа для глубокой модификации ядра Telegram. Архитектура плагинов, Xposed-хуки, Python-движок.</p>
+    <header class="max-w-3xl mx-auto px-6 py-24 text-center">
+        <h1 class="text-6xl font-extrabold tracking-tighter mb-6">AEGIS</h1>
+        <p class="text-xl text-slate-600 mb-10">Система плагинов для расширения функционала Telegram. Удобно, стабильно, модульно.</p>
+        
+        <div class="relative inline-block text-left" id="download-group">
+            <button onclick="toggleMenu()" class="bg-slate-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-slate-800 transition shadow-lg">
+                Скачать последнюю версию
+            </button>
+            <div id="dropdown" class="hidden absolute left-0 mt-2 w-full bg-white border border-slate-200 rounded-lg shadow-xl py-2 z-10">
+
+            </div>
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-12">
-        
-        <div class="md:col-span-2 space-y-16">
-                        
-            <section>
-                <h2 class="text-2xl font-bold text-white mb-6 border-l-4 border-blue-600 pl-4">Система плагинов</h2>
-                <div class="space-y-6 text-sm text-slate-400 leading-relaxed">
-                    <p>Aegis — это Telegram с поддержкой плагинов. Ты сам выбираешь, какие функции добавить, не переустанавливая приложение при каждом обновлении.</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-slate-900 p-4 rounded border border-slate-800">
-                            <h3 class="text-blue-400 font-bold">Гибкая настройка</h3>
-                            <p>Включай и отключай нужные функции в пару кликов. Никакого лишнего кода в основном клиенте.</p>
-                        </div>
-                        <div class="bg-slate-900 p-4 rounded border border-slate-800">
-                            <h3 class="text-blue-400 font-bold">Стабильность</h3>
-                            <p>Клиент работает плавно, а все дополнения никак не влияют на скорость запуска и работу мессенджера.</p>
-                        </div>
-                    </div>
+    <main class="max-w-3xl mx-auto px-6 pb-24 space-y-16">
+        <section>
+            <h2 class="text-2xl font-bold mb-6">Система плагинов</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <h3 class="font-bold mb-2">Гибкость</h3>
+                    <p class="text-slate-600 text-sm">Подключай только то, что нужно. Полная свобода действий внутри клиента.</p>
                 </div>
-            </section>
-
-            <section id="faq">
-                <h2 class="text-2xl font-bold text-white mb-6 border-l-4 border-blue-600 pl-4">FAQ / Документация</h2>
-                <div class="space-y-6 text-sm">
-                    <!--<div>
-                        <h4 class="text-white font-bold">Почему не обычный мод?</h4>
-                        <p class="text-slate-400">Обычные моды — это статичные сборки. Aegis предоставляет API для плагинов, что делает его гибким инструментом для разработчиков и power-users.</p>
-                    </div>-->
-                    <div>p class="text-slate-400">FAQ ещё пуст.</p></div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <h3 class="font-bold mb-2">Стабильность</h3>
+                    <p class="text-slate-600 text-sm">Никаких лишних процессов. Модули работают изолированно и быстро.</p>
                 </div>
-            </section>
-        </div>
-
-        <aside>
-            <div class="bg-slate-900 p-6 rounded border border-slate-800">
-                <h3 class="font-bold text-white mb-4">Архив файлов</h3>
-                <div id="file-list" class="text-xs text-slate-500">Загрузка списка файлов...</div>
             </div>
-        </aside>
+        </section>
 
-      <div class="bg-blue-950 p-6 rounded border border-blue-800 mt-8">
-          <h3 class="font-bold text-white mb-2">Техническая поддержка</h3>
-          <p class="text-xs text-blue-300 mb-4 leading-relaxed">
-              Возникли проблемы при установке или ошибки в плагинах? Пиши в наш бот поддержки.
-          </p>
-          <a href="https://t.me/aegis_client_support_bot" target="_blank" class="block w-full bg-blue-600 hover:bg-blue-500 text-center py-2 rounded font-bold text-sm transition">
-              Открыть Telegram-бота
-          </a>
-      </div>
+        <section>
+            <h2 class="text-2xl font-bold mb-6">Поддержка</h2>
+            <p class="text-slate-600 mb-4">Если возникли вопросы, мы на связи.</p>
+            <a href="https://t.me/aegis_client_support_bot" class="text-primary font-bold hover:underline">Перейти в Telegram-бота →</a>
+        </section>
     </main>
 
     <script>
         const REPO = 'KirillHojji/aegispage'; 
         const FOLDER = 'downloads';
 
-        async function fetchFiles() {
+        async function init() {
             try {
-                const response = await fetch(`https://api.github.com/repos/${REPO}/contents/${FOLDER}`);
-                const files = await response.json();
-                const container = document.getElementById('file-list');
-                container.innerHTML = "";
+                const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FOLDER}`);
+                const files = await res.json();
+                const menu = document.getElementById('dropdown');
                 
-                files.forEach(file => {
-                    container.innerHTML += `
-                        <div class="border-b border-slate-800 pb-3 mb-3">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-white font-bold">${file.name}</span>
-                                <a href="${file.download_url}" class="text-blue-500 underline">Скачать</a>
-                            </div>
-                            <div class="text-[10px] text-slate-600">Размер: ${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-                        </div>
-                    `;
+                files.forEach(f => {
+                    menu.innerHTML += `<a href="${f.download_url}" class="block px-4 py-2 hover:bg-slate-50 text-sm">${f.name}</a>`;
                 });
-            } catch (e) {
-                document.getElementById('file-list').innerHTML = "Ошибка загрузки файлов.";
+            } catch(e) {
+                document.getElementById('download-group').innerHTML = "Ошибка загрузки файлов";
             }
         }
-        fetchFiles();
+
+        function toggleMenu() {
+            document.getElementById('dropdown').classList.toggle('hidden');
+        }
+        init();
     </script>
 </body>
 </html>
