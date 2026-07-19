@@ -32,22 +32,48 @@
         
         <!-- Features -->
         <section>
-            <h2 class="text-2xl font-bold mb-6">Система плагинов</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                    <h3 class="font-bold mb-2">Гибкость</h3>
-                    <p class="text-slate-600 text-sm">Подключай только то, что нужно. Полная свобода действий внутри клиента.</p>
+            <h2 class="text-4xl font-extrabold tracking-tight mb-12">Наши преимущества</h2>
+            
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold mb-6">Система плагинов</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                        <h3 class="font-bold mb-2">Гибкость</h3>
+                        <p class="text-slate-600 text-sm">Подключай только то, что нужно. Полная свобода действий внутри клиента.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                        <h3 class="font-bold mb-2">Стабильность</h3>
+                        <p class="text-slate-600 text-sm">Никаких лишних процессов. Модули работают изолированно и быстро.</p>
+                    </div>
                 </div>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                    <h3 class="font-bold mb-2">Стабильность</h3>
-                    <p class="text-slate-600 text-sm">Никаких лишних процессов. Модули работают изолированно и быстро.</p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold mb-6">Дополнительные настройки</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                        <h3 class="font-bold mb-2">Удобство</h3>
+                        <p class="text-slate-600 text-sm">Расширенные скрытые настройки, всё строится под вас.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                        <h3 class="font-bold mb-2">Кастомизация</h3>
+                        <p class="text-slate-600 text-sm">Изменяй вид интерфейса, шрифты и поведение элементов под свой личный вкус.</p>
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section>
+            <h2 class="text-4xl font-extrabold tracking-tight mb-12">FAQ</h2>
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                <p class="text-slate-500 text-sm italic">Раздел находится в разработке, здесь пока пусто.</p>
             </div>
         </section>
         
         <!-- Resources -->
         <section>
-            <h2 class="text-2xl font-bold mb-6">Наши ресурсы</h2>
+            <h2 class="text-4xl font-extrabold tracking-tight mb-12">Наши ресурсы</h2>
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-center justify-between">
                     <div>
@@ -68,7 +94,7 @@
 
         <!-- Support -->
         <section>
-            <h2 class="text-2xl font-bold mb-6">Поддержка</h2>
+            <h2 class="text-4xl font-extrabold tracking-tight mb-12">Поддержка</h2>
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex items-center justify-between">
                 <p class="text-blue-800">Есть вопросы или предложения? Наш бот всегда на связи.</p>
                 <a href="https://t.me/aegis_client_support_bot" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition">Написать боту</a>
@@ -78,7 +104,7 @@
 
     <!-- Error Modal -->
     <div id="error-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
-        <div class="bg-white p-8 rounded-2xl max-w-sm w-full shadow-2xl text-center">
+        <div class="bg-white p-8 rounded-2xl max-w-sm w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-2">Ошибка доступа</h3>
             <p class="text-slate-600 mb-6">Файлы для скачивания временно недоступны. Проверьте подключение или статус репозитория.</p>
             <button onclick="closeModal()" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Закрыть</button>
@@ -93,13 +119,18 @@
         async function init() {
             const list = document.getElementById('file-list');
             try {
-                const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
-                const release = await res.json();
+                const res = await fetch(`https://api.github.com/repos/${REPO}/releases`);
+                const releases = await res.json();
                 
-                if (!release.assets || release.assets.length === 0) throw new Error("Нет файлов");
+                if (!releases || releases.length === 0 || !releases[0].assets || releases[0].assets.length === 0) {
+                    throw new Error("Нет файлов");
+                }
                 
+                const latest = releases[0];
+                const isBeta = latest.prerelease;
                 const ua = navigator.userAgent.toLowerCase();
-                let files = release.assets.map(a => ({
+                
+                let files = latest.assets.map(a => ({
                     url: a.browser_download_url,
                     name: a.name.toLowerCase()
                 }));
@@ -111,7 +142,8 @@
                 
                 files.forEach(f => {
                     let label = f.name.includes('apk') ? 'Версия Android' : (f.name.includes('exe') ? 'Версия Windows' : (f.name.includes('deb') ? 'Версия Linux' : 'Другой файл'));
-                    let item = { label, url: f.url };
+                    let displayLabel = isBeta ? `${label} <span class="ml-2 bg-red-100 text-red-600 text-[10px] px-1.5 py-0.5 rounded font-bold">BETA</span>` : label;
+                    let item = { label: displayLabel, url: f.url };
                     
                     if (target && f.name.includes(target)) sorted.push(item);
                     else others.push(item);
@@ -119,7 +151,7 @@
                 
                 list.innerHTML = "";
                 [...sorted, ...others].forEach(f => {
-                    list.innerHTML += `<a href="${f.url}" class="block px-4 py-2 hover:bg-slate-50">${f.label}</a>`;
+                    list.innerHTML += `<a href="${f.url}" class="block px-4 py-2 hover:bg-slate-50 flex justify-between items-center">${f.label}</a>`;
                 });
             } catch(e) {
                 isError = true;
