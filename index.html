@@ -5,21 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aegis | Client</title>
+    <meta property="og:title" content="Aegis Client">
+    <meta property="og:description" content="Модульный клиент Telegram с поддержкой плагинов и гибкой настройкой.">
+    <meta property="og:image" content="icon.png">
     <link rel="icon" type="image/png" href="icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#007AFF',
+                        dark: '#0f172a',
+                        darker: '#020617'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .transition-colors { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+    </style>
 </head>
-<body class="bg-white text-slate-900 font-sans">
+<body class="bg-white text-slate-900 transition-colors dark:bg-darker dark:text-slate-100 font-sans">
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="fixed top-6 right-6 p-3 rounded-full bg-slate-100 dark:bg-slate-800 transition-colors z-50">
+        <svg id="theme-icon" class="w-6 h-6 text-slate-900 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path id="theme-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+        </svg>
+    </button>
 
     <!-- Header -->
     <header class="max-w-3xl mx-auto px-6 py-24 text-center">
         <h1 class="text-6xl font-extrabold tracking-tighter mb-6">AEGIS</h1>
-        <p class="text-xl text-slate-600 mb-10">Клиент, система плагинов для расширения функционала Telegram. Дополнительные настройки. Удобно, стабильно, модульно.</p>
+        <p class="text-xl text-slate-600 dark:text-slate-400 mb-10">Клиент, система плагинов для расширения функционала Telegram. Дополнительные настройки. Удобно, стабильно, модульно.</p>
         
         <div class="relative inline-block text-left" id="download-wrapper">
-            <button onclick="toggleMenu(event)" class="bg-slate-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-slate-800 transition shadow-lg">
+            <button onclick="toggleMenu(event)" class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-600 transition shadow-lg shadow-primary/20">
                 Скачать последнюю версию
             </button>
-            <div id="dropdown" class="hidden absolute left-0 mt-2 w-64 bg-white border border-slate-200 rounded-lg shadow-xl py-2 z-10">
+            <div id="dropdown" class="hidden absolute left-0 mt-2 w-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl py-2 z-10">
                 <div id="file-list" class="text-sm">
                     <p class="px-4 py-2 text-slate-400">Загрузка...</p>
                 </div>
@@ -32,18 +59,18 @@
         
         <!-- Features -->
         <section>
-            <h2 class="text-4xl font-extrabold tracking-tight mb-12">Наши преимущества</h2>
+            <h2 class="text-4xl font-extrabold tracking-tight mb-12 text-center">Наши преимущества</h2>
             
             <div class="mb-16">
                 <h2 class="text-2xl font-bold mb-6">Система плагинов</h2>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                    <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary transition">
                         <h3 class="font-bold mb-2">Гибкость</h3>
-                        <p class="text-slate-600 text-sm">Подключай только то, что нужно. Полная свобода действий внутри клиента.</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm">Подключай только то, что нужно. Полная свобода действий внутри клиента.</p>
                     </div>
-                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                    <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary transition">
                         <h3 class="font-bold mb-2">Стабильность</h3>
-                        <p class="text-slate-600 text-sm">Никаких лишних процессов. Модули работают изолированно и быстро.</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm">Никаких лишних процессов. Модули работают изолированно и быстро.</p>
                     </div>
                 </div>
             </div>
@@ -51,13 +78,13 @@
             <div>
                 <h2 class="text-2xl font-bold mb-6">Дополнительные настройки</h2>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                    <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary transition">
                         <h3 class="font-bold mb-2">Удобство</h3>
-                        <p class="text-slate-600 text-sm">Расширенные скрытые настройки, всё строится под вас.</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm">Расширенные скрытые настройки, всё строится под вас.</p>
                     </div>
-                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:border-slate-200 transition">
+                    <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary transition">
                         <h3 class="font-bold mb-2">Кастомизация</h3>
-                        <p class="text-slate-600 text-sm">Изменяй вид интерфейса, шрифты и поведение элементов под свой личный вкус.</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm">Изменяй вид интерфейса, шрифты и поведение элементов под свой личный вкус.</p>
                     </div>
                 </div>
             </div>
@@ -66,8 +93,8 @@
         <!-- FAQ -->
         <section>
             <h2 class="text-4xl font-extrabold tracking-tight mb-12">FAQ</h2>
-            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                <p class="text-slate-500 text-sm italic">Раздел находится в разработке, здесь пока пусто.</p>
+            <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700">
+                <p class="text-slate-500 dark:text-slate-400 text-sm italic">Раздел находится в разработке, здесь пока пусто.</p>
             </div>
         </section>
         
@@ -75,19 +102,19 @@
         <section>
             <h2 class="text-4xl font-extrabold tracking-tight mb-12">Наши ресурсы</h2>
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-center justify-between">
+                <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between">
                     <div>
                         <h3 class="font-bold">Fulias Team</h3>
-                        <p class="text-slate-500 text-sm">Наша команда</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Наша команда</p>
                     </div>
-                    <a href="https://t.me/fulias_team" target="_blank" class="bg-white border border-slate-200 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 transition">Открыть</a>
+                    <a href="https://t.me/fulias_team" target="_blank" class="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 dark:hover:bg-slate-600 transition">Открыть</a>
                 </div>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-center justify-between">
+                <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between">
                     <div>
                         <h3 class="font-bold">Канал Aegis</h3>
-                        <p class="text-slate-500 text-sm">Новости и обновления</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Новости и обновления</p>
                     </div>
-                    <a href="https://t.me/aegis_tgclient" target="_blank" class="bg-white border border-slate-200 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 transition">Открыть</a>
+                    <a href="https://t.me/aegis_tgclient" target="_blank" class="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 dark:hover:bg-slate-600 transition">Открыть</a>
                 </div>
             </div>
         </section>
@@ -95,19 +122,19 @@
         <!-- Support -->
         <section>
             <h2 class="text-4xl font-extrabold tracking-tight mb-12">Поддержка</h2>
-            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex items-center justify-between">
-                <p class="text-blue-800">Есть вопросы или предложения? Наш бот всегда на связи.</p>
-                <a href="https://t.me/aegis_client_support_bot" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition">Написать боту</a>
+            <div class="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-xl border border-blue-100 dark:border-blue-800 flex items-center justify-between">
+                <p class="text-blue-800 dark:text-blue-200">Есть вопросы или предложения? Наш бот всегда на связи.</p>
+                <a href="https://t.me/aegis_client_support_bot" class="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600 transition">Написать боту</a>
             </div>
         </section>
     </main>
 
     <!-- Error Modal -->
     <div id="error-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
-        <div class="bg-white p-8 rounded-2xl max-w-sm w-full shadow-2xl">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl max-w-sm w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-2">Ошибка доступа</h3>
-            <p class="text-slate-600 mb-6">Файлы для скачивания временно недоступны. Проверьте подключение или статус репозитория.</p>
-            <button onclick="closeModal()" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Закрыть</button>
+            <p class="text-slate-600 dark:text-slate-400 mb-6">Файлы для скачивания временно недоступны. Проверьте подключение или статус репозитория.</p>
+            <button onclick="closeModal()" class="w-full bg-primary text-white py-3 rounded-lg font-bold">Закрыть</button>
         </div>
     </div>
 
@@ -115,6 +142,17 @@
     <script>
         const REPO = 'KirillHojji/aegisclient';
         let isError = false;
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const path = document.getElementById('theme-path');
+            
+            if (document.documentElement.classList.contains('dark')) {
+                path.setAttribute('d', 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z');
+            } else {
+                path.setAttribute('d', 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z');
+            }
+        }
     
         async function init() {
             const list = document.getElementById('file-list');
@@ -151,7 +189,7 @@
                 
                 list.innerHTML = "";
                 [...sorted, ...others].forEach(f => {
-                    list.innerHTML += `<a href="${f.url}" class="block px-4 py-2 hover:bg-slate-50 flex justify-between items-center">${f.label}</a>`;
+                    list.innerHTML += `<a href="${f.url}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex justify-between items-center">${f.label}</a>`;
                 });
             } catch(e) {
                 isError = true;
