@@ -30,7 +30,7 @@
     <!-- Main Content -->
     <main class="max-w-3xl mx-auto px-6 pb-24 space-y-16">
         
-        <!-- Особенности -->
+        <!-- Features -->
         <section>
             <h2 class="text-2xl font-bold mb-6">Система плагинов</h2>
             <div class="grid md:grid-cols-2 gap-6">
@@ -45,11 +45,10 @@
             </div>
         </section>
         
-        <!-- Ресурсы -->
+        <!-- Resources -->
         <section>
             <h2 class="text-2xl font-bold mb-6">Наши ресурсы</h2>
             <div class="grid md:grid-cols-2 gap-6">
-                <!-- Fulias Team -->
                 <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-center justify-between">
                     <div>
                         <h3 class="font-bold">Fulias Team</h3>
@@ -57,8 +56,6 @@
                     </div>
                     <a href="https://t.me/fulias_team" target="_blank" class="bg-white border border-slate-200 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 transition">Открыть</a>
                 </div>
-        
-                <!-- Aegis Channel -->
                 <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-center justify-between">
                     <div>
                         <h3 class="font-bold">Канал Aegis</h3>
@@ -69,7 +66,7 @@
             </div>
         </section>
 
-        <!-- Поддержка -->
+        <!-- Support -->
         <section>
             <h2 class="text-2xl font-bold mb-6">Поддержка</h2>
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex items-center justify-between">
@@ -79,7 +76,7 @@
         </section>
     </main>
 
-    <!-- Modal Error -->
+    <!-- Error Modal -->
     <div id="error-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
         <div class="bg-white p-8 rounded-2xl max-w-sm w-full shadow-2xl text-center">
             <h3 class="text-xl font-bold mb-2">Ошибка доступа</h3>
@@ -88,29 +85,48 @@
         </div>
     </div>
 
+    <!-- Script Block -->
     <script>
-        const REPO = 'KirillHojji/aegispage'; 
-        const FOLDER = 'downloads';
+        const REPO = 'KirillHojji/aegisclient';
         let isError = false;
-
+    
         async function init() {
             const list = document.getElementById('file-list');
             try {
-                const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FOLDER}`);
-                const files = await res.json();
+                const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
+                const release = await res.json();
                 
-                if (!files || files.length === 0) throw new Error("Пусто");
+                if (!release.assets || release.assets.length === 0) throw new Error("Нет файлов");
+                
+                const ua = navigator.userAgent.toLowerCase();
+                let files = release.assets.map(a => ({
+                    url: a.browser_download_url,
+                    name: a.name.toLowerCase()
+                }));
+                
+                let sorted = [];
+                let others = [];
+                
+                let target = ua.includes('android') ? 'apk' : (ua.includes('win') ? 'exe' : (ua.includes('linux') ? 'deb' : ''));
+                
+                files.forEach(f => {
+                    let label = f.name.includes('apk') ? 'Версия Android' : (f.name.includes('exe') ? 'Версия Windows' : (f.name.includes('deb') ? 'Версия Linux' : 'Другой файл'));
+                    let item = { label, url: f.url };
+                    
+                    if (target && f.name.includes(target)) sorted.push(item);
+                    else others.push(item);
+                });
                 
                 list.innerHTML = "";
-                files.forEach(f => {
-                    list.innerHTML += `<a href="${f.download_url}" class="block px-4 py-2 hover:bg-slate-50">${f.name}</a>`;
+                [...sorted, ...others].forEach(f => {
+                    list.innerHTML += `<a href="${f.url}" class="block px-4 py-2 hover:bg-slate-50">${f.label}</a>`;
                 });
             } catch(e) {
                 isError = true;
-                list.innerHTML = `<p class="px-4 py-2 text-red-500">Ошибка загрузки</p>`;
+                list.innerHTML = `<p class="px-4 py-2 text-red-500">Релизов пока нет</p>`;
             }
         }
-
+    
         function toggleMenu(e) {
             e.stopPropagation();
             if (isError) {
@@ -119,11 +135,11 @@
             }
             document.getElementById('dropdown').classList.toggle('hidden');
         }
-
+    
         function closeModal() {
             document.getElementById('error-modal').classList.add('hidden');
         }
-
+    
         window.onclick = function() {
             document.getElementById('dropdown').classList.add('hidden');
         }
